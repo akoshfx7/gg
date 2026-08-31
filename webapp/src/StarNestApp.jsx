@@ -1627,6 +1627,7 @@ export default function StarNestApp() {
   const [userToken, setUserToken] = useState(null);
   const [referralLink, setReferralLink] = useState(null);
   const [backendReady, setBackendReady] = useState(false);
+  const [debugInfo, setDebugInfo] = useState("boot");
 
   // Telegram Mini App ochilganda: Telegram'ning o'zi tomonidan imzolangan
   // initData'ni backend'ga yuboramiz. Backend uni tekshirib, HAQIQIY
@@ -1635,9 +1636,12 @@ export default function StarNestApp() {
   // saqlanib turadi (mock/vaqtinchalik emas).
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
-    if (!tg) return;
+    if (!tg) { setDebugInfo("tg:YO'Q"); return; }
     tg.ready?.();
     tg.expand?.();
+
+    const initLen = (tg.initData || "").length;
+    setDebugInfo(`tg:bor initData_len:${initLen} API_URL:${API_URL || "BO'SH"}`);
 
     if (!API_URL || !tg.initData) return;
 
@@ -1754,6 +1758,13 @@ export default function StarNestApp() {
 
   return (
     <div className="snx-root" style={{ minHeight: "100vh" }}>
+      <div style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 9999, fontSize: 10,
+        color: "#fff", background: "#c0392b", padding: "3px 8px", textAlign: "center",
+        fontFamily: "monospace",
+      }}>
+        DEBUG: {debugInfo}
+      </div>
       <GlobalStyle />
       <Toast toast={toast} />
 
