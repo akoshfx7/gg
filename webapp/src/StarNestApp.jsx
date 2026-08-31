@@ -1758,13 +1758,6 @@ export default function StarNestApp() {
 
   return (
     <div className="snx-root" style={{ minHeight: "100vh" }}>
-      <div style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 9999, fontSize: 10,
-        color: "#fff", background: "#c0392b", padding: "3px 8px", textAlign: "center",
-        fontFamily: "monospace",
-      }}>
-        DEBUG: {debugInfo}
-      </div>
       <GlobalStyle />
       <Toast toast={toast} />
 

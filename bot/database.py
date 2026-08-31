@@ -20,6 +20,10 @@ DEFAULT_SETTINGS = {
         "4. Buyurtmangiz admin tomonidan tasdiqlanishini kuting"
     ),
     "admin_contact_text": "\U0001F935\U0001F3FC\u200D\u2642\uFE0F Admin bilan bog'lanish: @starnest_admin",
+    "shop_open_text": (
+        "\u2B50\uFE0F <b>Stars va Premium sotib olish</b>\n\n"
+        "Quyidagi tugma orqali Mini App'ni oching \U0001F447"
+    ),
     "btn_guide_label": "\U0001F4D5Foydalanuvchi qo'llanmasi",
     "btn_admins_label": "\U0001F935\U0001F3FC\u200D\u2642\uFE0FAdminlar",
     "btn_shop_label": "\u2B50\uFE0FStars va Premium sotib olish\U0001F48E",

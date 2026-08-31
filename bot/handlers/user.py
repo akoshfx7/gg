@@ -5,9 +5,18 @@ from aiogram.types import CallbackQuery, Message
 from config import ADMIN_IDS
 from database import Database
 from force_sub import build_subscribe_keyboard, get_missing_channels
-from keyboards import admin_main_menu, user_main_menu
+from keyboards import admin_main_menu, shop_open_kb, user_main_menu
 
 user_router = Router()
+
+
+async def send_shop_open(bot_target, db: Database):
+    """'Stars va Premium sotib olish' tugmasi bosilganda chaqiriladi. Bu yerdan
+    ochilgan inline tugma - Telegram HAQIQIY, imzolangan foydalanuvchi
+    ma'lumotini (initData) yuboradigan YAGONA usul. Oddiy pastki (reply)
+    tugmalarda buni Telegram umuman bermaydi."""
+    text = await db.get_setting("shop_open_text")
+    await bot_target.answer(text, reply_markup=shop_open_kb())
 
 
 async def send_welcome(bot_target, db: Database, user_id: int, name: str, force_user_view: bool = False):
@@ -36,6 +45,13 @@ async def switch_to_user_view(message: Message, db: Database):
         "\U0001F465 Foydalanuvchi bo'limiga o'tdingiz.",
         reply_markup=await user_main_menu(db, is_admin=True),
     )
+
+
+@user_router.message(F.text == "\u2B50\uFE0FStars va Premium sotib olish\U0001F48E")
+async def admin_open_shop(message: Message, db: Database):
+    if message.from_user.id not in ADMIN_IDS:
+        return
+    await send_shop_open(message, db)
 
 
 @user_router.message(CommandStart())
@@ -98,8 +114,10 @@ async def handle_user_menu(message: Message, db: Database):
     if message.from_user.id in ADMIN_IDS:
         return
 
-    labels = await db.get_settings(["btn_guide_label", "btn_admins_label"])
+    labels = await db.get_settings(["btn_guide_label", "btn_admins_label", "btn_shop_label"])
     if message.text == labels["btn_guide_label"]:
         await message.answer(await db.get_setting("guide_text"))
     elif message.text == labels["btn_admins_label"]:
         await message.answer(await db.get_setting("admin_contact_text"))
+    elif message.text == labels["btn_shop_label"]:
+        await send_shop_open(message, db)
